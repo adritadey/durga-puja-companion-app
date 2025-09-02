@@ -1,0 +1,68 @@
+# Durga Puja Companion App – Python UX Simulation
+
+# Simulated user profiles
+users = [
+    {"name": "Ananya", "location": "Salt Lake", "prefers_notifications": True, "accessibility_needs": False},
+    {"name": "Rohit", "location": "Behala", "prefers_notifications": False, "accessibility_needs": True},
+    {"name": "Meera", "location": "Park Circus", "prefers_notifications": True, "accessibility_needs": False}
+]
+
+# Pandal data by neighborhood
+pandals = {
+    "Salt Lake": {"theme": "Eco-Friendly", "crowd_level": "Moderate", "accessible": True},
+    "Behala": {"theme": "Mythical Legends", "crowd_level": "High", "accessible": False},
+    "Park Circus": {"theme": "Digital Bengal", "crowd_level": "Low", "accessible": True}
+}
+
+# Function to generate personalized Durga Puja plan
+def generate_user_experience(user, pandals):
+    zone = user["location"]
+    pandal = pandals.get(zone, {})
+    
+    print(f"\nHi {user['name']}! Here's your Durga Puja plan:")
+    print(f"• Theme in {zone}: {pandal.get('theme', 'Unknown')}")
+    print(f"• Crowd Level: {pandal.get('crowd_level', 'Unknown')}")
+
+    if user["prefers_notifications"]:
+        print("• You’ll receive live updates and alerts.")
+
+    if pandal.get("crowd_level") == "High":
+        print("⚠️ Expect heavy crowds. Visit early or choose a less crowded pandal.")
+
+    if user["accessibility_needs"] and not pandal.get("accessible", False):
+        print("⚠️ This pandal may not be accessible. Consider visiting Park Circus instead.")
+    elif user["accessibility_needs"]:
+        print("• This pandal is accessible and senior-friendly.")
+
+    # Export personalized plan to file
+    filename = f"{user['name'].lower().replace(' ', '_')}_puja_plan.txt"
+    with open(filename, "w") as file:
+        file.write(f"Durga Puja Plan for {user['name']}:\n")
+        file.write(f"Location: {zone}\n")
+        file.write(f"Theme: {pandal.get('theme', 'Unknown')}\n")
+        file.write(f"Crowd Level: {pandal.get('crowd_level', 'Unknown')}\n")
+        if user["prefers_notifications"]:
+            file.write("Notifications: Enabled\n")
+        if user["accessibility_needs"]:
+            access_msg = "Accessible" if pandal.get("accessible", False) else "Not Accessible"
+            file.write(f"Accessibility: {access_msg}\n")
+
+# Run simulation for all users
+for user in users:
+    generate_user_experience(user, pandals)
+
+# Optional: Interactive input for new user
+print("\n--- Create Your Own Puja Plan ---")
+name = input("Enter your name: ")
+location = input("Enter your neighborhood (Salt Lake, Behala, Park Circus): ")
+prefers_notifications = input("Do you want notifications? (yes/no): ").strip().lower() == "yes"
+accessibility_needs = input("Do you need accessibility support? (yes/no): ").strip().lower() == "yes"
+
+new_user = {
+    "name": name,
+    "location": location,
+    "prefers_notifications": prefers_notifications,
+    "accessibility_needs": accessibility_needs
+}
+
+generate_user_experience(new_user, pandals)
